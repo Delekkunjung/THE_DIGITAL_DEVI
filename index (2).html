@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Digital Devi - Navadurga QR Scan</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #faf3e0;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    header {
+      background: #b71c1c;
+      color: white;
+      padding: 1rem;
+    }
+    h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+    #reader {
+      width: 320px;
+      margin: 1rem auto;
+    }
+    .card {
+      background: white;
+      max-width: 400px;
+      margin: 1rem auto;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .card h2 {
+      color: #b71c1c;
+    }
+    .mantra {
+      font-style: italic;
+      color: #444;
+      margin: 0.5rem 0;
+    }
+    iframe {
+      width: 100%;
+      height: 200px;
+      border-radius: 8px;
+      border: none;
+    }
+  </style>
+  <!-- Include html5-qrcode library -->
+  <script src="https://unpkg.com/html5-qrcode" type="application/javascript"></script>
+</head>
+<body>
+  <header>
+    <h1>Digital Devi - Navadurga QR Scan</h1>
+    <p>Scan each Devi's QR code to see details</p>
+  </header>
+
+  <!-- QR Code scanner -->
+  <div id="reader"></div>
+
+  <!-- Container to display Devi content -->
+  <div class="card" id="devi-card" style="display:none;">
+    <h2 id="devi-name"></h2>
+    <p id="devi-description"></p>
+    <p class="mantra" id="devi-mantra"></p>
+    <iframe id="devi-video" src="" allowfullscreen></iframe>
+  </div>
+
+  <script>
+    // Devi data mapped to QR code values
+    const deviData = {
+      "Shailaputri": {
+        name: "1. Shailaputri",
+        description: "Daughter of Himalayas, symbol of strength and devotion.",
+        mantra: "ॐ देवी शैलपुत्र्यै नमः॥",
+        video: "https://www.youtube.com/embed/Xc-5upBplaQ"
+      },
+      "Brahmacharini": {
+        name: "2. Brahmacharini",
+        description: "Goddess of penance and austerity, embodies wisdom and knowledge.",
+        mantra: "ॐ देवी ब्रह्मचारिण्यै नमः॥",
+        video: "https://www.youtube.com/embed/rB4PvLdbfTM"
+      },
+      "Chandraghanta": {
+        name: "3. Chandraghanta",
+        description: "Warrior form with bell-shaped moon, protector from demons.",
+        mantra: "ॐ देवी चन्द्रघण्टायै नमः॥",
+        video: "https://www.youtube.com/embed/rB4PvLdbfTM"
+      },
+      "Kushmanda": {
+        name: "4. Kushmanda",
+        description: "Creator of the universe, radiates cosmic energy.",
+        mantra: "ॐ देवी कूष्माण्डायै नमः॥",
+        video: "https://www.youtube.com/embed/rB4PvLdbfTM"
+      },
+      "Skandamata": {
+        name: "5. Skandamata",
+        description: "Mother of Skanda (Kartikeya), grants wisdom and salvation.",
+        mantra: "ॐ देवी स्कन्दमातायै नमः॥",
+        video: "https://www.youtube.com/embed/rB4PvLdbfTM"
+      },
+      "Katyayani": {
+        name: "6. Katyayani",
+        description: "Fierce warrior form born to sage Katyayan, destroys evil.",
+        mantra: "ॐ देवी कात्यायन्यै नमः॥",
+        video: "https://www.youtube.com/embed/rB4PvLdbfTM"
+      },
+      "Kalaratri": {
+        name: "7. Kalaratri",
+        description: "Dark form, remover of fear and negativity.",
+        mantra: "ॐ देवी कालरात्र्यै नमः॥",
+        video: "https://www.youtube.com/embed/rB4PvLdbfTM"
+      },
+      "Mahagauri": {
+        name: "8. Mahagauri",
+        description: "Pure, serene form symbolizing peace and purity.",
+        mantra: "ॐ देवी महागौर्यै नमः॥",
+        video: "https://www.youtube.com/embed/rB4PvLdbfTM"
+      },
+      "Siddhidatri": {
+        name: "9. Siddhidatri",
+        description: "Bestower of siddhis (supernatural powers) and blessings.",
+        mantra: "ॐ देवी सिद्धिदात्र्यै नमः॥",
+        video: "https://www.youtube.com/embed/7ewivPWY_d4"
+      }
+    };
+
+    function onScanSuccess(decodedText, decodedResult) {
+      // Stop scanning once a code is detected
+      html5QrcodeScanner.clear();
+
+      if(deviData[decodedText]) {
+        const data = deviData[decodedText];
+        document.getElementById('devi-name').innerText = data.name;
+        document.getElementById('devi-description').innerText = data.description;
+        document.getElementById('devi-mantra').innerText = data.mantra;
+        document.getElementById('devi-video').src = data.video;
+        document.getElementById('devi-card').style.display = 'block';
+      } else {
+        alert("Unknown QR code scanned. Please scan a valid Devi QR code.");
+      }
+    }
+
+    function onScanFailure(error) {
+      // scanning failure, ignored or log if needed
+      // console.warn(`Code scan error = ${error}`);
+    }
+
+    // Initialize the html5-qrcode scanner
+    let html5QrcodeScanner = new Html5Qrcode("reader");
+    html5QrcodeScanner.start(
+      { facingMode: "environment" },
+      {
+        fps: 10,    // optional, frame per seconds for qr code scanning
+        qrbox: 250  // optional, scanning box size
+      },
+      onScanSuccess,
+      onScanFailure
+    ).catch(err => {
+      console.error(`Unable to start scanning, error: ${err}`);
+    });
+  </script>
+</body>
+</html>
